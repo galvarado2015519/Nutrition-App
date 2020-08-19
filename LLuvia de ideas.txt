@@ -1,0 +1,7 @@
+Recomendaciones:
+	- Que se pueda poner un parametro de hora a cada comida y tire una
+	  notificación.
+	- Que exista un chat entre el doctor y el paciente
+	- Que tenga un check list para ver si se esta comiendo la comida o
+	  ciertos días no pudo.
+	- 

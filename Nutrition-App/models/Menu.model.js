@@ -1,8 +1,9 @@
 
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const menuSchema = schema({
+const menuSchema = Schema({
+    idDoctor: [{type: Schema.Types.ObjectId, ref:'doctor'}],
     breakfast:{ 
         time: Date,
         food: []

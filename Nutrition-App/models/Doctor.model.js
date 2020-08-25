@@ -1,11 +1,10 @@
 
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const doctorSchema = schema({
+const doctorSchema = Schema({
     perfile:{
         name: String,
-        userName: String,
         matricula: String,
         email: String,
         password: String,

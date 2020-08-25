@@ -3,17 +3,19 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const patientSchema = schema({
-    perfil:{
+    perfile:{
         name: String,
         username: String,
-        password: string
+        email: String,
+        password: String,
+        telephone: String
     },
     menu:{
-        type: schema.Types.ObjectId, ref:'menu',
-        breakfast: String,
-        lunch: String,
-        price: String,
-        refaction: String
+        idMenu:[{type: schema.Types.ObjectId, ref:'menu'}],
+        breakfast: [],
+        lunch: [],
+        price: [],
+        refaction: []
     },
     ailment:[{
         description: String

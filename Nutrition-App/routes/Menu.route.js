@@ -5,8 +5,9 @@ let express = require('express');
 let api = express.Router();
 
 api.post('/saveMenu', menuController.saveMenu);
-api.put('/updateMenu', menuController.updateMenu);
-api.get('/viewMenu', menuController.viewMenu);
-api.delete('/deleteMenu', menuController.deleteMenu);
+api.put('/updateMenu/:id', menuController.updateMenu);
+api.get('/viewMenu/:id', menuController.viewMenu);
+api.delete('/deleteMenu/:id', menuController.deleteMenu);
 
+api.get('/viewMenus', menuController.viewMenus);
 module.exports = api;

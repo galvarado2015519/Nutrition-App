@@ -4,10 +4,11 @@ let patientController = require('../controllers/Patient.controller');
 let express = require('express');
 let api = express.Router();
 
-api.post('/savePatient', patientController.savePatient);
-api.put('/updatePatient/:id', patientController.updatePatient);
-api.get('/viewPatient/:id', patientController.viewPatient);
-api.delete('/deletePatient/:id', patientController.deletePatient);
+api.post('/', patientController.savePatient);
+api.put('/:id', patientController.updatePatient);
+api.get('/:id', patientController.viewPatient);
+api.delete('/:id', patientController.deletePatient);
 
-api.get('/viewPacients', patientController.viewPatients);
+api.get('/', patientController.viewPatients);
+
 module.exports = api;

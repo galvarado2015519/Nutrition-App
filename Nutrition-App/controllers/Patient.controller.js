@@ -3,27 +3,24 @@
 const Patient = require('../models/Patient.model');
 const bcrypt = require('bcrypt-nodejs');
 
-/*
-        if(err){
-            res.status(500).send({message:"1. Error general del servidor, err: " + err});
-        }else if(){
-
-        }else{
-            
-        }
-*/
-
+// Funciones para guardar los pacientes
 function savePatient(req, res) {
     
+    // importo el modelo de Pacientes y en la const "body" referencio el cuerpo de las peticiones
     const patient = new Patient();
     const body = req.body;
 
+    /* Busco en la base de datos un usuario que tenga el correo que se acaba de ingresar
+        Si lo encontro le dira que ese correo ya esta registrado*/
     Patient.findOne({'perfile.email': body.email},(err,patientRepeat)=>{
         if(err){
             res.status(500).send({message:"1. Error general del servidor, error: "+err});
         }else if(patientRepeat){
             res.status(403).send({message:"Este correo ya esta registrado, pruebe con otro"});
         }else{
+
+            // En la const que cree para referenciar el modelo. Le agrego los valores uno por uno
+
             patient.perfile.name = body.name;
             patient.perfile.username = body.username;
             patient.perfile.email = body.email;
@@ -39,12 +36,14 @@ function savePatient(req, res) {
 
             patient.ailment.description = body.ailment;
 
+            //Encripto la contraseña
             bcrypt.hash(body.password, null, null, (err, passwordEncrypt)=>{
                 if(err){
                     res.status(500).send({message:"2. Error general del servidor, error: "+ err});
                 }else if(passwordEncrypt){
                     patient.perfile.password = passwordEncrypt;
 
+                    //Guardo el paciente 
                     patient.save((err, patientSave)=>{
                         if(err){
                             res.status(500).send({message:"3. Error general del servidor, error: " + err});
@@ -64,14 +63,20 @@ function savePatient(req, res) {
 
 function updatePatient(req, res) {
     
+    /* Creo dos constantes:
+     1. "body" referencia el cuerpo de la aplicación
+     2. "idP" referencia la URI y recibe el id que mande*/
     const body = req.body;
     const idP = req.params.id;
 
+    //Busca en la base de datos el usuario con el id que recibio en la URI
     Patient.findById(idP,(err,doc)=>{
         if(err){
             res.status(500).send({message:"1. Error general del servidor, err: " + err});
         }else if(doc){
-            Patient.findOneAndUpdate(idP,body,{new:true},(err,patientUpdate)=>{
+
+            // Actualizar el usuario que que encontro
+            Patient.findByIdAndUpdate(idP,body,{new:true},(err,patientUpdate)=>{
                 if(err){
                     res.status(500).send({message:"1. Error general del servidor, err: " + err});
                 }else if(patientUpdate){
@@ -86,6 +91,7 @@ function updatePatient(req, res) {
     });
 }
 
+//Busca un usuario por su ID
 function viewPatient(req, res) {
     
     const idP = req.params.id;
@@ -94,13 +100,14 @@ function viewPatient(req, res) {
         if(err){
             res.status(500).send({message:"1. Error general del servidor, err: " + err});
         }else if(patientFind){
-            res.status(200).send({Doctor: patientFind});
+            res.status(200).send({Paciente: patientFind});
         }else{
-            res.status(404).send({Doctor:"No hay ningún paciente registrado con este nombre"});
+            res.status(404).send({message:"No hay ningún paciente registrado con este nombre"});
         }
     });
 }
 
+// Busca todos los pacientes que existen
 function viewPatients(req,res) {
     Patient.find(( err, findPatients )=> {
         if(err){
@@ -113,6 +120,7 @@ function viewPatients(req,res) {
     });
 }
 
+// Borro un paciente por su Id
 function deletePatient(req, res) {
     
     var idP = req.params.id;
@@ -128,6 +136,7 @@ function deletePatient(req, res) {
     });
 }
 
+//Exporto los modulos de las funciones que cree para poder usarlas en las rutas
 module.exports = {
     savePatient,
     updatePatient,

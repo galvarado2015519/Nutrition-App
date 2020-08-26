@@ -19,8 +19,16 @@ app.use((req, res, next) =>{
     next();
 });
 
-app.use('/doctor',doctorRoute);
-app.use('/patient',patientRoute);
-app.use('/menu',menuRoute);
+
+/* Le indico a express las terminaciones de las rutas que voy a utilizar conjunto a las rutas
+   Ejem: http://localhost:3800/doctor/saveDoctor
+   despues de 'localhost:3800'/ va el '/doctor' que se definio en:
+        app.use('/doctor',`doctorRoute`)
+    importado de las constante donde importe la ruta:
+        `doctorRoute` 
+    */ 
+app.use('/doctors',doctorRoute);
+app.use('/patients',patientRoute);
+app.use('/menus',menuRoute);
 
 module.exports = app;

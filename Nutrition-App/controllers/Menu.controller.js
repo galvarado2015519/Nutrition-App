@@ -3,22 +3,17 @@
 const Menu = require('../models/Menu.model');
 const bcrypt = require('bcrypt-nodejs');
 
-/*
-        if(err){
-            res.status(500).send({message:"1. Error general del servidor, err: " + err});
-        }else if(){
-
-        }else{
-            
-        }
-*/
-
+// Guardar un menu
 function saveMenu(req, res) {
     
+    /*Creo un objeto del modelo,
+     referencio el body con la const "body"
+     referencio la URI y pido el id en la const "idMenu"*/
     const menu = new Menu();
     const body = req.body;
     const idMenu = req.params.id;
 
+    //Busco por el id que el menu no este repetido
     Menu.findById(idMenu,(err,menuRepeat)=>{
         if(err){
             res.status(500).send({message:"1. Error general del servidor, error: "+err});
@@ -26,6 +21,7 @@ function saveMenu(req, res) {
             res.status(403).send({message:"Este menu ya existe, realize otro o busque el que ya creo"});
         }else{
             
+            /* Asigno los valores al objeto que cree del modelo */
             menu.idDoctor;
             
             menu.breakfast.time = Date(body.breakfasttime);
@@ -37,7 +33,7 @@ function saveMenu(req, res) {
             menu.price.time = Date(body.pricetime);
             menu.price.food = body.pricefood;
 
-
+            // Guardo el menu en la base de datos
             menu.save((err, menuSave)=>{
                 if(err){
                     res.status(500).send({message:"2. Error general del servidor, err: " + err});
@@ -54,18 +50,21 @@ function saveMenu(req, res) {
 
 function updateMenu(req, res) {
     
+    //Referencio el cuerpo y el id de la URI a tráves de las constantes 'body' , 'idM' respectivamente
     const body = req.body;
     const idM = req.params.id;
 
+    // Busca el menu por su id
     Menu.findById(idM,(err,doc)=>{
         if(err){
             res.status(500).send({message:"1. Error general del servidor, err: " + err});
         }else if(doc){
-            Menu.findOneAndUpdate(idM,body,{new:true},(err,menuUpdate)=>{
+            //Actualiza el menu por su Id
+            Menu.findByIdAndUpdate(idM,body,{new:true},(err,menuUpdate)=>{
                 if(err){
                     res.status(500).send({message:"2. Error general del servidor, err: " + err});
                 }else if(menuUpdate){
-                    res.status(200).send({Doctor: menuUpdate})
+                    res.status(200).send({Menu: menuUpdate})
                 }else{
                     res.status(403).send({message:"No se pudo guardar el menu"});
                 }
@@ -78,19 +77,21 @@ function updateMenu(req, res) {
 
 function viewMenu(req, res) {
     
+    // Busco el menu por su id
     const idM = req.params.id;
 
-    Menu.findById(idM,(err,doctorFind)=>{
+    Menu.findById(idM,(err,menuFind)=>{
         if(err){
             res.status(500).send({message:"1. Error general del servidor, err: " + err});
-        }else if(doctorFind){
-            res.status(200).send({Doctor: doctorFind});
+        }else if(menuFind){
+            res.status(200).send({Menu: menuFind});
         }else{
-            res.status(404).send({Doctor:"No hay ningún menu registrado con estas especificaciones"});
+            res.status(404).send({message:"No hay ningún menu registrado con estas especificaciones"});
         }
     });
 }
 
+// Miro los menus de la base de datos
 function viewMenus(req,res) {
     
     // Que por medio del id del doctor se busquen los menus que el creo
@@ -99,13 +100,14 @@ function viewMenus(req,res) {
         if(err){
             res.status(500).send({message:"1. Error general del servidor, err: " + err});
         }else if(findMenus){
-            res.status(200).send({doctors:findMenus});
+            res.status(200).send({Menus:findMenus});
         }else{
             res.status(404).send({message:"No hay menus"});
         }
     });
 }
 
+// Funcion que elemina el menu por Id
 function deleteMenu(req, res) {
     
     // Validar que solo en nutriologo pueda borrar el menu
@@ -124,6 +126,7 @@ function deleteMenu(req, res) {
     });
 }
 
+//Importa las funciones para utilizarlos en las rutas que se crearon en su respectivo archivo
 module.exports = {
     saveMenu,
     updateMenu,
